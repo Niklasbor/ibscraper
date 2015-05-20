@@ -5,25 +5,25 @@ Scrapes http://fcis.aisdhaka.org/ to download IB Physics exams, then reads them 
 
 Current features:
 
-  Updating from website
+    Updating from website
   
-  Writing Paper 1 questions to file
+    Writing Paper 1 questions to file
   
 To do:
-  Write 30 Paper 1 questions to a single HTML file
+    Write 30 Paper 1 questions to a single HTML file
   
-  Write Paper 2 and 3 questions to file
+    Write Paper 2 and 3 questions to file
   
-  Extract images from PDF documents
+    Extract images from PDF documents
   
-  HL Tests!
+    HL Tests!
   
 Dependencies:
 
-  BeautifulSoup
+    BeautifulSoup
   
-  PDFMiner
+    PDFMiner
   
-  Python3
+    Python3
   
 Note: I'm using the Python3 port of PDFMiner, as it does not natively support Python3. It can be found here: https://pypi.python.org/pypi/pdfminer3k
