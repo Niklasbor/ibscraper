@@ -9,6 +9,7 @@ from pdfminer.pdfparser import PDFParser, PDFDocument
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBox, LTTextLine, LTImage, LTFigure
+import random
 
 def get():
     pagelist = []
@@ -41,7 +42,8 @@ def get():
                         if 'SL' in link['href']:
                             examlist.append(link['href'])
                             print("Found http://fcis.aisdhaka.org/personal/chendriks/IB/IB%20Site/" + link['href'])
-    print("Done. Writing files. This may take a minute...")
+    print("Done.")
+    print("Writing files. This may take a minute...")
     os.mkdir("Tests")
     os.chdir("Tests")
     
@@ -61,6 +63,7 @@ def get():
     print("Everything is up to date.")
     
 def randomize():
+    print("OK. Sorting tests...")
     paper1s = []
     paper2s = []
     paper3s = []
@@ -83,7 +86,7 @@ def randomize():
     paper2questions = []
     paper3questions = []
     
-    
+    print("Done.")
     
     try:
         os.mkdir("Tests")
@@ -95,6 +98,7 @@ def randomize():
     count = 0
     question = []
     new_question = False
+    print ("Reading paper 1s...")
     for fname in paper1s:
         infile = open(fname, 'rb')
         parser = PDFParser(infile)
@@ -132,14 +136,57 @@ def randomize():
                         continue
                 elif isinstance(lt_obj, LTFigure):
                     print(lt_obj)
-        for n, x in enumerate(paper1questions):
+        print("Read " + fname)
+    testlist = []
+    print("Done.")
+    print("Writing 30 random paper 1 questions...")
+    for n in range(0, 30):
+        testlist.append(paper1questions[random.randint(0, len(paper1questions) - 1)])
+            
+    with open("test.txt", 'w') as f:
+        for n, x in enumerate(testlist):
             for y in x:
-                y.replace('\t', ' ')
-                y.replace('\n', '')
-            with open('test' + str(n) + '.txt', 'w') as f:
-                if n>30:
-                    for z in x:
-                        f.write(z)    
+                f.write(y)
+            print("Wrote question number " + str(n+1))
+            
+    print("Reading paper 2s...")
+    for fname in paper2s:
+        infile = open(fname, 'rb')
+        parser = PDFParser(infile)
+        doc = PDFDocument()
+        parser.set_document(doc)
+        doc.set_parser(parser)
+        doc.initialize('')
+        rsrcmgr = PDFResourceManager()
+        laparams = LAParams()
+        device = PDFPageAggregator(rsrcmgr, laparams=laparams)
+        interpreter = PDFPageInterpreter(rsrcmgr, device)
+        for x, page in enumerate(doc.get_pages()):
+            if x == 0:
+                continue
+            interpreter.process_page(page)
+            layout = device.get_result()
+            for n, lt_obj in enumerate(layout):
+                if isinstance(lt_obj, LTTextBox) or isinstance(lt_obj, LTTextLine):
+                    text = lt_obj.get_text()
+                    if len(question) == 0:
+                        question.append(text)
+                    if ('A1.' in text or 'A2.' in text) or ('A1.' in text or 'A3.' in text) or ('A2.' in text or 'A3.' in text):
+                        paper2questions.append(question)
+                        question = [text]
+                    else:
+                        question.append(text)
+    testlist2 = []
+    print("Done.")
+    print("Writing 3 random paper 2 questions...")
+    for x in range (0, 3):
+        testlist2.append(paper2questions[random.randint(0, len(paper2questions) - 1)])
+    with open('test.txt', 'a') as f:
+        for n, y in enumerate(testlist2):
+            for z in y:
+                f.write(z)
+            print("Wrote question number " + str(n+1))
+    print("Your new test is saved as test.txt. Be sure to move it out of this directory or the next time you do this errors will be thrown.")
 
 def run():
     instring = input("Welcome to Niklas's IB Physics web scraper and test randomizer! What would you like to do? (u for update, r for randomize) ")
