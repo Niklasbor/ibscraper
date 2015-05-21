@@ -7,13 +7,13 @@ Current features:
 
     Updating from website
   
-    Writing Paper 1 questions to file
+    Writing Paper 1 and 2 questions to file
   
 To do:
 
     Write 30 Paper 1 questions to a single HTML file
   
-    Write Paper 2 and 3 questions to file
+    Write Paper 3 questions to file
   
     Extract images from PDF documents
   
